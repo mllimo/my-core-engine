@@ -29,6 +29,8 @@ public:
         collider.SetGeometry(std::make_unique<core::Square>(_body.form));
         SetCollider(collider);
         EnableCollider();
+
+        SetTag("Car");
     }
 
     void SetPropertiesImp(Actor::Properties properties) override

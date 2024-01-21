@@ -23,11 +23,16 @@ public:
         collider.SetGeometry(std::make_unique<core::Square>(_body));
         SetCollider(collider);
         EnableCollider();
+
+        SetTag("Wall");
     }
 
-    void OnCollision(Actor* other)
+    void UpdateLogic() override
     {
-        _color = GREEN;
+        if (core::CollisionEngine::AreColliding(this, "Car"))
+            _color = GREEN;
+        else
+            _color = RED;
     }
 
     void UpdateDraw() override
@@ -38,49 +43,8 @@ public:
 private:
     core::Square _body;
     Color _color;
+    bool _collided = false;
 };
-
-namespace repro {
-    bool IsColliding(const std::vector<Vector2>& vertices, const std::vector<Vector2>& other_vertices)
-    {
-        if (vertices.size() == 0 || other_vertices.size() == 0) return false;
-
-        auto& bigger_vertices_vector = (vertices.size() >= other_vertices.size()
-            ? vertices
-            : other_vertices
-            );
-
-        auto& lower_vertices_vector = (other_vertices.size() <= vertices.size()
-            ? other_vertices
-            : vertices
-            );
-
-        for (const auto& vertex : lower_vertices_vector) {
-            if (CheckCollisionPointPoly(vertex, (Vector2*)bigger_vertices_vector.data(), bigger_vertices_vector.size()))
-                return true;
-        }
-
-        // When vertices are not in the area of the poly
-        for (long i = (long)bigger_vertices_vector.size() - 1; i >= 0; i -= 1) {
-            if (i - 1 < 0) break;
-            Vector2 i_A = bigger_vertices_vector[i];
-            Vector2 i_B = bigger_vertices_vector[i - 1ll];
-
-            for (long j = (long)lower_vertices_vector.size() - 1; j >= 0; j -= 1) {
-                if (j - 1 < 0) break;
-                Vector2 j_A = lower_vertices_vector[j];
-                Vector2 j_B = lower_vertices_vector[j - 1ll];
-
-                Vector2 dummy;
-                if (CheckCollisionLines(i_A, i_B, j_A, j_B, &dummy))
-                    return true;
-            }
-        }
-
-        return false;
-    }
-}
-
 
 #if 1
 int main() {

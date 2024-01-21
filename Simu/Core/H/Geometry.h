@@ -1,12 +1,14 @@
 #pragma once
 
+#include <CoreAPI.h>
+
 #include <raymath.h>
 
 #include <vector>
 
 namespace core {
 	
-	class Geometry {
+	class CORE_EXPORT Geometry {
 	public:
 		Geometry() = default;
 		Geometry(const Geometry&) = default;
@@ -44,7 +46,7 @@ namespace core {
 
 	};
 
-	class Square : public Geometry {
+	class CORE_EXPORT Square : public Geometry {
 	public:
 		using Geometry::Geometry;
 

@@ -6,6 +6,25 @@
 
 namespace core {
 
+	static bool CheckCollisionPointPoly(Vector2 point, Vector2* points, int pointCount)
+	{
+		bool inside = false;
+
+		if (pointCount > 2)
+		{
+			for (int i = 0, j = pointCount - 1; i < pointCount; j = i++)
+			{
+				if ((points[i].y > point.y) != (points[j].y > point.y) &&
+					(point.x < (points[j].x - points[i].x) * (point.y - points[i].y) / (points[j].y - points[i].y) + points[i].x))
+				{
+					inside = !inside;
+				}
+			}
+		}
+			
+		return inside;
+	}
+
 	Collider::Collider(const Collider& other)
 	{
 		_geometry.reset(other._geometry->Copy());
@@ -35,7 +54,7 @@ namespace core {
 		);
 
 		for (const auto& vertex : lower_vertices_vector) {
-			if (CheckCollisionPointPoly(vertex, (Vector2*)bigger_vertices_vector.data(), bigger_vertices_vector.size()))
+			if (core::CheckCollisionPointPoly(vertex, (Vector2*)bigger_vertices_vector.data(), bigger_vertices_vector.size()))
 				return true;
 		}
 
@@ -113,5 +132,11 @@ namespace core {
 
 		SetRotationImp(rotation);
 	}
+
+	void Actor::SetTag(const std::string& tag)
+	{
+		_properties.tag = tag;
+	}
+
 }
  

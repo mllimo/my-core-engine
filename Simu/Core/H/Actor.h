@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <string_view>
 
 #include <raylib.h>
 
@@ -11,7 +12,7 @@
 
 namespace core {
 
-	class Collider {
+	class CORE_EXPORT Collider {
 		friend class Actor;
 
 	public:
@@ -30,12 +31,13 @@ namespace core {
 		std::unique_ptr<Geometry> _geometry;
 	};
 
-	class Actor {
+	class CORE_EXPORT Actor {
 	public:
 		struct Properties {
 			float rotation = 0;
 			Vector2 position = { 0, 0 };
 			Collider collider;
+			std::string tag;
 		};
 
 		Actor() = default;
@@ -51,25 +53,26 @@ namespace core {
 		void EnableCollider();
 		void DisableCollider();
 
-
 		// Base Setters
 		void SetProperties(Properties properties);
 		void SetCollider(Collider collider);
 		void SetPosition(Vector2 position);
 		void SetRotation(float rotation);
+		void SetTag(const std::string& tag);
 
-		
+
 		// Base Getters
 		const Properties& GetProperties() const { return _properties; }
 		const Collider& GetCollider() const { return _properties.collider; }
 		Vector2 GetPosition() { return _properties.position; }
 		float GetRotation() { return _properties.rotation; }
-
+		std::string_view GetTag() { return _properties.tag; }
 
 		// Custom functions
 		virtual void UpdateLogic() {}
 		virtual void UpdateDraw() {}
 		virtual void OnCollision(Actor*) {}
+		virtual void OnNoCollision() {}
 
 	protected:
 		// Custom Setters
@@ -77,6 +80,7 @@ namespace core {
 		virtual void SetPositionImp(Vector2 /*position*/ ) {}
 		virtual void SetRotationImp(float /*rotation*/) {}
 
+	private:
 		Properties _properties;
 		bool _enable_collider = false;
 	};
