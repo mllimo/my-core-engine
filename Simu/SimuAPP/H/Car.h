@@ -81,9 +81,7 @@ public:
 
     void UpdateDraw() override
     {
-        Vector2 center = _body.form.GetCenter();
-        Vector2 direction = { cos(GetRotation()) * 100, sin(GetRotation()) * 100 };
-        DrawLineEx(center, Vector2Add(center, direction), 2, GREEN);
+        DebugDrawDirectionLine();
         DrawTriangleFan((Vector2*)_body.form.GetVertices().data(), _body.form.GetVertices().size(), _body.color);
         DrawText(std::to_string(GetRotation()).c_str(), GetPosition().x, GetPosition().y, 20, BLUE);
     }

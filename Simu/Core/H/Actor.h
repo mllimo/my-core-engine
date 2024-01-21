@@ -8,28 +8,9 @@
 #include <raylib.h>
 
 #include <CoreAPI.h>
-#include <Core/H/Geometry.h>
+#include <Core/H/Collider.h>
 
 namespace core {
-
-	class CORE_EXPORT Collider {
-		friend class Actor;
-
-	public:
-		Collider() = default;
-		Collider(const Collider& other);
-		Collider(Collider&&) = default;
-
-		Collider& operator=(const Collider&);
-		Collider& operator=(Collider&&) = default;
-
-		void SetGeometry(std::unique_ptr<Geometry> collider) { _geometry = std::move(collider); }
-
-		virtual bool IsColliding(Collider& other) const;
-
-	protected:
-		std::unique_ptr<Geometry> _geometry;
-	};
 
 	class CORE_EXPORT Actor {
 	public:
@@ -73,6 +54,9 @@ namespace core {
 		virtual void UpdateDraw() {}
 		virtual void OnCollision(Actor*) {}
 		virtual void OnNoCollision() {}
+
+		// Debug drawss
+		void DebugDrawDirectionLine();
 
 	protected:
 		// Custom Setters

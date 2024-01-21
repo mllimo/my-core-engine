@@ -61,11 +61,10 @@ int main() {
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
-    Color color = RED;
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        auto start = std::chrono::high_resolution_clock::now();
+        core::DeltaTime delta;
         // Update
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
@@ -89,10 +88,6 @@ int main() {
 
         EndDrawing();
         //----------------------------------------------------------------------------------
-
-        auto end = std::chrono::high_resolution_clock::now();
-        auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-        core::DeltaTime::delta = 1 / (diff == 0 ? 0.000000000000001f : diff);
     }
 
     // De-Initialization
