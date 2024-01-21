@@ -5,16 +5,17 @@
 #include <deque>
 #include <memory>
 
-#include <Core/H/Object.h>
+#include <Core/H/Actor.h>
 
 namespace core {
 	class CORE_EXPORT CollisionEngine {
 	public:
 
-		static void Add(Object* object);
+		static void Add(Actor* object);
+		static void Remove(Actor* object);
 		static void Update();
 
 	private:
-		static std::deque<Object*> _objects;
+		static std::deque<Actor*> _objects;
 	};
 }
