@@ -26,5 +26,9 @@ namespace core {
 
 	protected:
 		std::unique_ptr<Geometry> _geometry;
+
+	private:
+		bool IsCollidingVsCircle(const Geometry& this_geo, const Circle& other) const;
+		bool IsCollidingCircleVsCircle(const Circle& this_circle, const Circle& other) const;
 	};
 }

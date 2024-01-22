@@ -31,7 +31,7 @@ namespace core {
 		Vector2 GetCenter() const;
 
 		// Implementations
-		virtual const std::vector<Vector2>& GetVertices() { return _vertices; }
+		virtual const std::vector<Vector2>& GetVertices() const { return _vertices; }
 
 	protected:
 		const Vector2& At(size_t index) const { return _vertices[index]; }
@@ -43,7 +43,6 @@ namespace core {
 		float _angle = 0;
 		Vector2 _origin = { 0, 0 };
 		std::vector<Vector2> _vertices;
-
 	};
 
 	class CORE_EXPORT Square : public Geometry {
@@ -63,5 +62,24 @@ namespace core {
 
 	private:
 		Vector2 _size;
+	};
+
+	class CORE_EXPORT Circle : public Geometry {
+	public:
+		using Geometry::Geometry;
+
+		Circle(Vector2 position, float radius);
+
+		Geometry* Copy() const override;
+
+		// Setters
+		void SetRadius(float radius);
+
+
+		// Getters
+		float GetRadius() const;
+
+	private:
+		float _radius;
 	};
 }

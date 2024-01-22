@@ -1,4 +1,5 @@
 #include <Core/H/Collider.h>
+#include <Core/H/Math.h>
 
 #include <vector>
 
@@ -33,6 +34,34 @@ namespace core {
 		return *this;
 	}
 
+	bool Collider::IsCollidingCircleVsCircle(const Circle& this_circle, const Circle& other) const
+	{
+		float distance = Vector2Distance(this_circle.GetCenter(), other.GetCenter());
+		float sumRadii = this_circle.GetRadius() + other.GetRadius();
+
+		return distance <= sumRadii;
+	}
+
+	bool Collider::IsCollidingVsCircle(const Geometry& this_geo, const Circle& other) const
+	{
+		Vector2 this_position = this_geo.GetPosition();
+		const std::vector<Vector2>& this_vertices = this_geo.GetVertices();
+
+		for (const Vector2& vertex : this_vertices)
+		{
+			Vector2 sum = Vector2Add(vertex, this_position);
+			Circle vertex_circle(sum, 0.0f);
+			vertex_circle.SetRadius(Vector2Distance(vertex_circle.GetCenter(), sum));
+
+			if (IsCollidingCircleVsCircle(vertex_circle, other))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	bool Collider::IsColliding(Collider& other) const
 	{
 		auto& vertices = _geometry->GetVertices();
@@ -40,6 +69,20 @@ namespace core {
 
 		if (vertices.size() == 0 || other_vertices.size() == 0) return false;
 
+		const Circle* other_circle = dynamic_cast<Circle*>(other._geometry.get());
+		const Circle* this_circle = dynamic_cast<Circle*>(_geometry.get());
+
+
+		// Circle cases
+		if (this_circle && other_circle)
+			return IsCollidingCircleVsCircle(*this_circle, *other_circle);
+		else if (other_circle)
+			return IsCollidingVsCircle(*_geometry, *other_circle);
+		else if (this_circle)
+			return other.IsCollidingVsCircle(*other._geometry, *this_circle);
+
+
+		// Poly cases
 		auto& bigger_vertices_vector = (vertices.size() >= other_vertices.size()
 			? vertices
 			: other_vertices
@@ -54,6 +97,7 @@ namespace core {
 			if (core::CheckCollisionPointPoly(vertex, (Vector2*)bigger_vertices_vector.data(), bigger_vertices_vector.size()))
 				return true;
 		}
+
 
 		// When vertices are not in the area of the poly
 		for (long i = (long)bigger_vertices_vector.size() - 1; i >= 0; i -= 1) {

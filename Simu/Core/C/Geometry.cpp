@@ -61,9 +61,9 @@ namespace core {
 		_vertices.resize(size);
 	}
 
-	//------------------------------------------------------------------------------------
-	// Square
-	//------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------
+// Square
+//------------------------------------------------------------------------------------
 	Square::Square(Vector2 position, Vector2 size) :
 		_size(size)
 	{
@@ -93,4 +93,32 @@ namespace core {
 	{
 		return _size;
 	}
+
+//------------------------------------------------------------------------------------
+// Circle
+//------------------------------------------------------------------------------------
+
+	Circle::Circle(Vector2 position, float radius)
+	{
+		ResizeVertices(1);
+		At(0) = position;
+		SetOrigin(position);
+		SetRadius(radius);
+	}
+
+	Geometry* Circle::Copy() const
+	{
+		return new Circle(*this);
+	}
+
+	void Circle::SetRadius(float radius)
+	{
+		_radius = radius;
+	}
+
+	float Circle::GetRadius() const
+	{
+		return _radius;
+	}
+
 }

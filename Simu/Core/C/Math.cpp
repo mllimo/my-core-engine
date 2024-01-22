@@ -18,4 +18,12 @@ namespace core {
 
 		return point;
 	}
+
+	float DistanceSquared(const Vector2& a, const Vector2& b)
+	{
+		float dx = b.x - a.x;
+		float dy = b.y - a.y;
+		return (dx * dx + dy * dy);
+	}
+
 }
