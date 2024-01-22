@@ -10,6 +10,7 @@
 #include <Core/H/CollisionEngine.h>
 
 #include <SimuAPP/H/Car.h>
+#include <SimuAPP/H/Ball.h>
 
 class Wall : public core::Actor {
 public:
@@ -46,7 +47,54 @@ private:
     bool _collided = false;
 };
 
-#if 1
+
+int main() {
+    // Initialization
+    //--------------------------------------------------------------------------------------
+    const int screenWidth = 800;
+    const int screenHeight = 450;
+
+    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+
+    Ball ball({100, 100}, 30);
+
+    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    //--------------------------------------------------------------------------------------
+
+    // Main game loop
+    while (!WindowShouldClose())    // Detect window close button or ESC key
+    {
+        core::DeltaTime delta;
+        // Update
+        //----------------------------------------------------------------------------------
+        // TODO: Update your variables here
+        //----------------------------------------------------------------------------------
+        
+        
+        ball.UpdateLogic();
+
+        core::CollisionEngine::Update();
+        // Draw
+        //----------------------------------------------------------------------------------
+        BeginDrawing();
+
+        ClearBackground(RAYWHITE);
+
+        ball.UpdateDraw();
+
+
+        EndDrawing();
+        //----------------------------------------------------------------------------------
+    }
+
+    // De-Initialization
+    //--------------------------------------------------------------------------------------
+    CloseWindow();        // Close window and OpenGL context
+    //--------------------------------------------------------------------------------------
+}
+
+
+#if 0
 int main() {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -69,8 +117,6 @@ int main() {
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         //----------------------------------------------------------------------------------
-
-        //actor.UpdateLogic();
 
         car.UpdateLogic();
         wall.UpdateLogic();

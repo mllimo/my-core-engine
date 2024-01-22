@@ -6,8 +6,6 @@
 #include <raymath.h>
 #include <rlgl.h>
 
-#include <SimuAPP/H/Element.h>
-
 #include <Core/H/DeltaTime.h>
 #include <Core/H/Actor.h>
 #include <Core/H/Math.h>
