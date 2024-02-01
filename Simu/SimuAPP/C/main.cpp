@@ -17,15 +17,25 @@ public:
     Wall()
     {
         _body.SetSize({20, 20});
-        _body.SetPosition({100, 100});
         _color = RED;
 
-        core::Collider collider;
-        collider.SetGeometry(std::make_unique<core::Square>(_body));
-        SetCollider(collider);
+        core::Collider collider(_body);
+        SetCollider(std::move(collider));
         EnableCollider();
 
         SetTag("Wall");
+
+        SetPosition({100, 100});
+    }
+
+    void SetPositionImp(Vector2 pos) override
+    {
+        _body.SetPosition(pos);
+    }
+
+    void SetRotationImp(float rotation) override
+    {
+        _body.SetRotation(rotation);
     }
 
     void UpdateLogic() override
@@ -48,6 +58,7 @@ private:
 };
 
 
+#if 0
 int main() {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -74,6 +85,9 @@ int main() {
         ball.UpdateLogic();
 
         core::CollisionEngine::Update();
+        // PhysicsEngine
+        // core::CollisionEngine::Update();
+        
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -82,6 +96,7 @@ int main() {
 
         ball.UpdateDraw();
 
+        DrawFPS(300,300);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -92,9 +107,9 @@ int main() {
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 }
+#endif
 
-
-#if 0
+#if 1
 int main() {
     // Initialization
     //--------------------------------------------------------------------------------------

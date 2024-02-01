@@ -17,10 +17,16 @@ namespace core {
 		Collider(const Collider& other);
 		Collider(Collider&&) = default;
 
+		Collider(const Geometry& collider) { _geometry.reset(collider.Copy()); }
+		Collider(std::unique_ptr<Geometry> collider) { _geometry = std::move(collider); }
+
 		Collider& operator=(const Collider&);
 		Collider& operator=(Collider&&) = default;
 
+		void SetGeometry(const Geometry& collider) { _geometry.reset(collider.Copy()); }
 		void SetGeometry(std::unique_ptr<Geometry> collider) { _geometry = std::move(collider); }
+
+		const Geometry& GetGeometry() const { return *_geometry; }
 
 		virtual bool IsColliding(Collider& other) const;
 

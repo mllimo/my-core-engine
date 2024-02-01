@@ -94,7 +94,7 @@ namespace core {
 			);
 
 		for (const auto& vertex : lower_vertices_vector) {
-			if (core::CheckCollisionPointPoly(vertex, (Vector2*)bigger_vertices_vector.data(), bigger_vertices_vector.size()))
+			if (core::CheckCollisionPointPoly(vertex, (Vector2*)bigger_vertices_vector.data(), (int)bigger_vertices_vector.size()))
 				return true;
 		}
 

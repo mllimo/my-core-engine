@@ -13,11 +13,8 @@ public:
 
 		SetTag("Ball");
 		SetPosition(position);
-		
-		core::Collider collider;
-		collider.SetGeometry(std::make_unique<core::Circle>(_body));
-		SetCollider(std::move(collider));
 
+		SetCollider({_body});
 		EnableCollider();
 	}
 

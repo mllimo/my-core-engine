@@ -3,6 +3,7 @@ option(LibA_BUILD_SHARED "Build the library as shared" OFF)
 
 # Find packages
 find_package(raylib)
+find_package(unofficial-box2d)
 
 # Sources
 file(GLOB CPP_SOURCES "*/**.cpp" "*/**.cc")
@@ -16,6 +17,7 @@ endif()
 
 target_link_libraries(${LIB_NAME} PUBLIC 
 	raylib
+	unofficial-box2d
 )
 
 generate_export_header(${LIB_NAME} EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/${LIB_NAME}API.h)

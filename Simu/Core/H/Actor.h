@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <memory>
 #include <vector>
 #include <string_view>
@@ -9,6 +8,7 @@
 
 #include <CoreAPI.h>
 #include <Core/H/Collider.h>
+#include <Core/H/Rigid.h>
 
 namespace core {
 
@@ -18,6 +18,7 @@ namespace core {
 			float rotation = 0;
 			Vector2 position = { 0, 0 };
 			Collider collider;
+			Rigid rigid;
 			std::string tag;
 		};
 
@@ -52,7 +53,6 @@ namespace core {
 		// Custom functions
 		virtual void UpdateLogic() {}
 		virtual void UpdateDraw() {}
-		virtual void OnCollision(Actor*) {}
 		virtual void OnNoCollision() {}
 
 		// Debug drawss
@@ -67,5 +67,7 @@ namespace core {
 	private:
 		Properties _properties;
 		bool _enable_collider = false;
+		bool _enable_physics = false;
+
 	};
 }

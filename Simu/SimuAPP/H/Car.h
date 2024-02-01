@@ -84,10 +84,6 @@ public:
         DrawText(std::to_string(GetRotation()).c_str(), GetPosition().x, GetPosition().y, 20, BLUE);
     }
 
-    void OnCollision(Actor* object) override
-    {
-    }
-
 protected:
     struct Body {
         Color color;
