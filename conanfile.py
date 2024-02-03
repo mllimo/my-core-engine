@@ -7,7 +7,8 @@ class SetUp(ConanFile):
 
 	def requirements(self):
 		self.requires("raylib/5.0")
-		
+		self.requires("box2d/2.4.1")
+
 	def configure(self):
 		pass
 
