@@ -5,6 +5,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include <box2d/box2d.h>
+
 #include <Core/H/DeltaTime.h>
 #include <Core/H/Actor.h>
 #include <Core/H/CollisionEngine.h>
@@ -57,58 +59,6 @@ private:
     bool _collided = false;
 };
 
-
-#if 0
-int main() {
-    // Initialization
-    //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
-
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
-
-    Ball ball({100, 100}, 30);
-
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
-    //--------------------------------------------------------------------------------------
-
-    // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
-    {
-        core::DeltaTime delta;
-        // Update
-        //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
-        //----------------------------------------------------------------------------------
-        
-        
-        ball.UpdateLogic();
-
-        core::CollisionEngine::Update();
-        // PhysicsEngine
-        // core::CollisionEngine::Update();
-        
-        // Draw
-        //----------------------------------------------------------------------------------
-        BeginDrawing();
-
-        ClearBackground(RAYWHITE);
-
-        ball.UpdateDraw();
-
-        DrawFPS(300,300);
-
-        EndDrawing();
-        //----------------------------------------------------------------------------------
-    }
-
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    CloseWindow();        // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
-}
-#endif
-
 #if 1
 int main() {
     // Initialization
@@ -117,7 +67,9 @@ int main() {
     const int screenHeight = 450;
 
     CarActor car;
-    Wall wall;
+    //Wall wall;
+
+    core::CollisionEngine::Init();
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
@@ -134,7 +86,7 @@ int main() {
         //----------------------------------------------------------------------------------
 
         car.UpdateLogic();
-        wall.UpdateLogic();
+        //wall.UpdateLogic();
 
         core::CollisionEngine::Update();
         // Draw
@@ -145,7 +97,7 @@ int main() {
 
         //actor.UpdateDraw();
         car.UpdateDraw();
-        wall.UpdateDraw();
+        //wall.UpdateDraw();
 
         EndDrawing();
         //----------------------------------------------------------------------------------

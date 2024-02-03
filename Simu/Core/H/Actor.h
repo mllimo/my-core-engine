@@ -6,19 +6,26 @@
 
 #include <raylib.h>
 
+#include <box2d/box2d.h>
+
 #include <CoreAPI.h>
 #include <Core/H/Collider.h>
-#include <Core/H/Rigid.h>
 
 namespace core {
 
 	class CORE_EXPORT Actor {
+		friend class CollisionEngine;
 	public:
 		struct Properties {
+			struct B2Properties {
+				b2Body* body = nullptr;
+				b2Fixture* fixture = nullptr;
+			};
+
 			float rotation = 0;
 			Vector2 position = { 0, 0 };
 			Collider collider;
-			Rigid rigid;
+			B2Properties b2_properties;
 			std::string tag;
 		};
 
@@ -36,7 +43,7 @@ namespace core {
 		void DisableCollider();
 
 		// Base Setters
-		void SetProperties(Properties properties);
+		void SetProperties(Properties&& properties);
 		void SetCollider(Collider collider);
 		void SetPosition(Vector2 position);
 		void SetRotation(float rotation);
@@ -60,9 +67,12 @@ namespace core {
 
 	protected:
 		// Custom Setters
-		virtual	void SetPropertiesImp(Properties /*properties*/) {}
+		virtual	void SetPropertiesImp(const Properties& /*properties*/) {}
 		virtual void SetPositionImp(Vector2 /*position*/ ) {}
 		virtual void SetRotationImp(float /*rotation*/) {}
+
+		// UpdatesFromB2
+		void UpdateFromB2();
 
 	private:
 		Properties _properties;

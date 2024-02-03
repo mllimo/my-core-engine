@@ -10,8 +10,8 @@
 
 namespace core {
 	class CORE_EXPORT Collider {
+		friend class CollisionEngine;
 		friend class Actor;
-
 	public:
 		Collider() = default;
 		Collider(const Collider& other);

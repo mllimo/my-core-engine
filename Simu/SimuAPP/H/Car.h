@@ -19,7 +19,7 @@ public:
         _body.force = Vector2Zero();
         _body.form.SetSize({40, 40});
         _body.form.SetOrigin(_body.form.GetCenter());
-        SetPosition({ 10, 10 });
+        SetPosition({ 100, 100 });
         _body.color = RED;
         _body.velocity = 30.f;
 
@@ -31,7 +31,7 @@ public:
         SetTag("Car");
     }
 
-    void SetPropertiesImp(Actor::Properties properties) override
+    void SetPropertiesImp(const Actor::Properties& properties) override
     {
     }
 

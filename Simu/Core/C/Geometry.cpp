@@ -7,6 +7,23 @@ namespace core {
 		return new Geometry(*this);
 	}
 
+	b2Shape* Geometry::ConstructB2FromThis() const
+	{
+		Vector2 center = GetCenter();
+
+		b2PolygonShape* shape = new b2PolygonShape;
+
+		// b2 vertices are relative to the body centroid
+		b2Vec2 vertices[8];
+		for (int i = 0; i < (int)_vertices.size(); ++i) {
+			vertices[i] = Scale(Vector2Subtract(_vertices[i], center));
+		}
+
+		shape->Set(vertices, (int)_vertices.size());
+
+		return shape;
+	}
+
 	Vector2 Geometry::GetCenter() const
 	{
 		float x = 0;
@@ -29,6 +46,7 @@ namespace core {
 		for (auto& vertex : _vertices) {
 			vertex = Vector2Add(vertex, distance);
 		}
+
 	}
 
 	void Geometry::SetRotation(float radians)
@@ -36,7 +54,6 @@ namespace core {
 		float sin_a = sin(radians - _angle);
 		float cos_a = cos(radians - _angle);
 
-		// Obtener el vértice alrededor del cual se va a rotar (en este caso, el vértice en el índice 0)
 		float pivotX = _origin.x;
 		float pivotY = _origin.y;
 
@@ -44,10 +61,10 @@ namespace core {
 			float x = vertex.x - pivotX;
 			float y = vertex.y - pivotY;
 
-			// Aplicar la rotación
 			vertex.x = cos_a * x - sin_a * y + pivotX;
 			vertex.y = sin_a * x + cos_a * y + pivotY;
 		}
+
 		_angle = radians;
 	}
 
@@ -59,7 +76,26 @@ namespace core {
 	void Geometry::ResizeVertices(size_t size)
 	{
 		_vertices.resize(size);
+		Updateb2();
 	}
+
+	void Geometry::Updateb2()
+	{
+		if (_b2_shape) {
+			//for (int i = 0; i < _vertices.size(); ++i) {
+			//	_b2_shape->m_vertices[i] = Scale(_vertices[i]);
+			//}
+			//_b2_shape->m_count = (int32_t)_vertices.size();
+		}
+	}
+
+	void Geometry::UpdateFromb2()
+	{
+		//for (int i = 0; i < _b2_shape->m_count; ++i) {
+		//	_vertices[i] = Vector2Add(Scale(_b2_shape->m_vertices[i]));
+		//}
+	}
+
 
 //------------------------------------------------------------------------------------
 // Square
@@ -87,6 +123,8 @@ namespace core {
 		At(2) = { At(0).x + size.x, At(0).y + size.y };
 		At(3) = { At(0).x + size.x, At(0).y};
 		SetRotation(GetRotation());
+
+		Updateb2();
 	}
 
 	Vector2 Square::GetSize() const

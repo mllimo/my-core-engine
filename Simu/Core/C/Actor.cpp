@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include <Core/H/Actor.h>
 
 #include <raymath.h>
@@ -29,10 +31,10 @@ namespace core {
 		CollisionEngine::Remove(this);
 	}
 
-	void Actor::SetProperties(Properties properties)
+	void Actor::SetProperties(Properties&& properties)
 	{
-		_properties = properties;
-		SetPropertiesImp(properties);
+		_properties = std::move(properties);
+		SetPropertiesImp(_properties);
 	}
 
 	void Actor::SetCollider(Collider collider)
@@ -44,6 +46,9 @@ namespace core {
 	{
 		_properties.position = position;
 
+		if (_properties.b2_properties.body)
+			_properties.b2_properties.body->SetTransform(ToB2Vetor2(position), GetRotation());
+
 		if (_properties.collider._geometry)
 			_properties.collider._geometry->SetPosition(position);
 
@@ -53,6 +58,9 @@ namespace core {
 	void Actor::SetRotation(float rotation)
 	{
 		_properties.rotation = rotation;
+
+		if (_properties.b2_properties.body)
+			_properties.b2_properties.body->SetTransform(ToB2Vetor2(GetPosition()), GetRotation());
 
 		if (_properties.collider._geometry)
 			_properties.collider._geometry->SetRotation(rotation);
@@ -72,6 +80,21 @@ namespace core {
 		DrawLineEx(center, Vector2Add(center, direction), 2, GREEN);
 	}
 
+	void Actor::UpdateFromB2()
+	{
+		b2Vec2 position = _properties.b2_properties.body->GetPosition();
+		float anglee = _properties.b2_properties.body->GetAngle();
+
+		std::stringstream ss;
+		ss << "ori -> " << GetPosition().x << "|" << GetPosition().y << " | angle: " << anglee << '\n';
+		ss << "bo2 -> " << position.x << "|" << position.y << " | angle: " << anglee;
+
+		TraceLog(LOG_INFO, ss.str().c_str());
+
+		float angle = _properties.b2_properties.body->GetAngle();
+		SetPosition(ToRayVetor2(_properties.b2_properties.body->GetPosition()));
+		SetRotation(angle);
+	}
 
 }
  

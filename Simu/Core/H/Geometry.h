@@ -1,14 +1,19 @@
 #pragma once
 
-#include <CoreAPI.h>
+
+#include <vector>
 
 #include <raymath.h>
 
-#include <vector>
+#include <box2d/box2d.h>
+
+#include <CoreAPI.h>
+#include <Core/H/Math.h>
 
 namespace core {
 	
 	class CORE_EXPORT Geometry {
+		friend class CollisionEngine;
 	public:
 		Geometry() = default;
 		Geometry(const Geometry&) = default;
@@ -17,7 +22,11 @@ namespace core {
 		Geometry& operator=(const Geometry&) = default;
 		Geometry& operator=(Geometry&&) = default;
 
+		// User will be the owner of the pointer
 		virtual Geometry* Copy() const;
+
+		// User will be the owner of the pointer
+		virtual b2Shape* ConstructB2FromThis() const;
 
 		// Base Setters
 		void SetPosition(Vector2 position);
@@ -34,6 +43,9 @@ namespace core {
 		virtual const std::vector<Vector2>& GetVertices() const { return _vertices; }
 
 	protected:
+		void Updateb2();
+		void UpdateFromb2();
+
 		const Vector2& At(size_t index) const { return _vertices[index]; }
 		Vector2& At(size_t index) { return _vertices[index]; }
 
@@ -43,6 +55,8 @@ namespace core {
 		float _angle = 0;
 		Vector2 _origin = { 0, 0 };
 		std::vector<Vector2> _vertices;
+		b2PolygonShape* _b2_shape = nullptr;
+
 	};
 
 	class CORE_EXPORT Square : public Geometry {

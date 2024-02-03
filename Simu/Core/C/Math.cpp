@@ -26,4 +26,23 @@ namespace core {
 		return (dx * dx + dy * dy);
 	}
 
+	Vector2 ToRayVetor2(const b2Vec2& a)
+	{
+		return { a.x, a.y };
+	}
+
+	b2Vec2 ToB2Vetor2(const Vector2& a)
+	{
+		return { a.x, a.y };
+	}
+
+	b2Vec2 Scale(const Vector2& a)
+	{
+		return b2Vec2(a.x * SCALE_FACTOR, a.y * SCALE_FACTOR);
+	}
+
+	Vector2 Scale(const b2Vec2& a)
+	{
+		return Vector2(a.x / SCALE_FACTOR, a.y / SCALE_FACTOR);
+	}
 }
