@@ -19,15 +19,15 @@ public:
         _body.force = Vector2Zero();
         _body.form.SetSize({40, 40});
         _body.form.SetOrigin(_body.form.GetCenter());
-        SetPosition({ 100, 100 });
         _body.color = RED;
-        _body.velocity = 30.f;
+        _body.velocity = 100.f;
 
         core::Collider collider;
         collider.SetGeometry(std::make_unique<core::Square>(_body.form));
-        SetCollider(collider);
+        SetCollider(std::move(collider));
         EnableCollider();
 
+        SetPosition({ 100, 100 });
         SetTag("Car");
     }
 
@@ -55,17 +55,19 @@ public:
 
         if (IsKeyDown(KEY_W)) {
             float velo_delta = _body.velocity * core::DeltaTime::delta;
-            Vector2 force_vector = { cos(GetRotation()) * velo_delta, sin(GetRotation()) * velo_delta};
-            _body.force = force_vector;
-            SetPosition(Vector2Add(GetPosition(), force_vector));
+            Vector2 force_vector = { cos(GetRotation()), sin(GetRotation())};
+            _properties.b2_properties.body->SetLinearVelocity(core::ToB2Vetor2(force_vector));
+            //_body.force = force_vector;
+            //SetPosition(Vector2Add(GetPosition(), force_vector));
         }
 
         if (IsKeyDown(KEY_S)) {
             float velo_delta = _body.velocity * core::DeltaTime::delta;
-            velo_delta *= -1;
-            Vector2 force_vector = { cos(GetRotation()) * velo_delta, sin(GetRotation()) * velo_delta };
-            _body.force = force_vector;
-            SetPosition(Vector2Add(GetPosition(), force_vector));
+            Vector2 force_vector = { cos(GetRotation()), sin(GetRotation()) * -1 };
+            _properties.b2_properties.body->SetLinearVelocity(core::ToB2Vetor2(force_vector));
+
+            //_body.force = force_vector;
+            //SetPosition(Vector2Add(GetPosition(), force_vector));
         }
 
         if (IsKeyDown(KEY_D)) {

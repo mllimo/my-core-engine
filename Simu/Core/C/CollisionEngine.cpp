@@ -6,7 +6,7 @@
 
 namespace core {
 
-	b2World CollisionEngine::_world(b2Vec2(0, 9));
+	b2World CollisionEngine::_world(b2Vec2(0, 0));
 	std::deque<Actor*> CollisionEngine::_objects = {};
 	std::unordered_map<Actor*, std::unordered_set<Actor*>> CollisionEngine::_collision_map = {};
 

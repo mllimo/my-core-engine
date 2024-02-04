@@ -74,10 +74,8 @@ namespace core {
 		// UpdatesFromB2
 		void UpdateFromB2();
 
-	private:
 		Properties _properties;
 		bool _enable_collider = false;
 		bool _enable_physics = false;
-
 	};
 }

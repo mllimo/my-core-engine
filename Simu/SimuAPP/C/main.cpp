@@ -19,15 +19,15 @@ public:
     Wall()
     {
         _body.SetSize({20, 20});
+        _body.SetOrigin(_body.GetCenter());
         _color = RED;
 
         core::Collider collider(_body);
         SetCollider(std::move(collider));
         EnableCollider();
 
+        SetPosition({200, 100});
         SetTag("Wall");
-
-        SetPosition({100, 100});
     }
 
     void SetPositionImp(Vector2 pos) override
@@ -67,7 +67,7 @@ int main() {
     const int screenHeight = 450;
 
     CarActor car;
-    //Wall wall;
+    Wall wall;
 
     core::CollisionEngine::Init();
 
@@ -97,7 +97,7 @@ int main() {
 
         //actor.UpdateDraw();
         car.UpdateDraw();
-        //wall.UpdateDraw();
+        wall.UpdateDraw();
 
         EndDrawing();
         //----------------------------------------------------------------------------------

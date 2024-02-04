@@ -10,7 +10,7 @@ namespace core {
 
 	Actor::Actor(Vector2 position)
 	{
-		_properties.position = position;
+		SetPosition(position);
 	}
 
 	Actor::~Actor()
@@ -39,7 +39,7 @@ namespace core {
 
 	void Actor::SetCollider(Collider collider)
 	{
-		_properties.collider = collider;
+		_properties.collider = std::move(collider);
 	}
 
 	void Actor::SetPosition(Vector2 position)
@@ -47,7 +47,7 @@ namespace core {
 		_properties.position = position;
 
 		if (_properties.b2_properties.body)
-			_properties.b2_properties.body->SetTransform(ToB2Vetor2(position), GetRotation());
+			_properties.b2_properties.body->SetTransform(Scale(position), GetRotation());
 
 		if (_properties.collider._geometry)
 			_properties.collider._geometry->SetPosition(position);
@@ -60,7 +60,7 @@ namespace core {
 		_properties.rotation = rotation;
 
 		if (_properties.b2_properties.body)
-			_properties.b2_properties.body->SetTransform(ToB2Vetor2(GetPosition()), GetRotation());
+			_properties.b2_properties.body->SetTransform(Scale(GetPosition()), GetRotation());
 
 		if (_properties.collider._geometry)
 			_properties.collider._geometry->SetRotation(rotation);
@@ -85,14 +85,8 @@ namespace core {
 		b2Vec2 position = _properties.b2_properties.body->GetPosition();
 		float anglee = _properties.b2_properties.body->GetAngle();
 
-		std::stringstream ss;
-		ss << "ori -> " << GetPosition().x << "|" << GetPosition().y << " | angle: " << anglee << '\n';
-		ss << "bo2 -> " << position.x << "|" << position.y << " | angle: " << anglee;
-
-		TraceLog(LOG_INFO, ss.str().c_str());
-
 		float angle = _properties.b2_properties.body->GetAngle();
-		SetPosition(ToRayVetor2(_properties.b2_properties.body->GetPosition()));
+		SetPosition(Scale(_properties.b2_properties.body->GetPosition()));
 		SetRotation(angle);
 	}
 
