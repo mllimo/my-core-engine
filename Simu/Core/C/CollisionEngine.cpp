@@ -1,5 +1,6 @@
 #include <Core/H/CollisionEngine.h>
 #include <Core/H/DeltaTime.h>
+#include <Core/H/Exceptions.h>
 
 #include <iostream>
 #include <unordered_set>
@@ -13,7 +14,14 @@ namespace core {
 	class Listener : public b2ContactListener {
 		void BeginContact(b2Contact* contact) override
 		{
-			std::cout << "asdads";
+			auto* actor_a = reinterpret_cast<Actor*>(contact->GetFixtureA()->GetBody()->GetUserData().pointer);
+			auto* actor_b = reinterpret_cast<Actor*>(contact->GetFixtureB()->GetBody()->GetUserData().pointer);
+
+			auto& set_a = CollisionEngine::_collision_map[actor_a];
+			set_a.insert(actor_b);
+
+			auto& set_b = CollisionEngine::_collision_map[actor_b];
+			set_b.insert(actor_a);
 		}
 	};
 
@@ -30,9 +38,14 @@ namespace core {
 		def.angle = object->_properties.rotation;
 		object->_properties.b2_properties.body = _world.CreateBody(&def);
 
+		if (not object->GetCollider().IsInitialize())
+			throw core::CollisionEngineException("CollisionEngine needs a collider to work");
+
 		std::unique_ptr<b2Shape> aux_ptr(object->GetCollider().GetGeometry().ConstructB2FromThis());
 		object->_properties.b2_properties.fixture = object->_properties.b2_properties.body->CreateFixture(aux_ptr.get(), 1);
 		object->_properties.collider._geometry->_b2_shape = dynamic_cast<b2PolygonShape*>(object->_properties.b2_properties.fixture->GetShape());
+
+		object->_properties.b2_properties.body->GetUserData().pointer = reinterpret_cast<uintptr_t>(object);
 
 		_objects.emplace_back(object);
 	}
@@ -72,6 +85,8 @@ namespace core {
 	{
 		static const int32_t velocity_iterations = 6;
 		static const int32_t position_iterations = 2;
+
+		_collision_map.clear();
 		_world.Step(DeltaTime::delta, velocity_iterations, position_iterations);
 
 		for (auto* actor : _objects) {

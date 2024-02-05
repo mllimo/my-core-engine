@@ -29,6 +29,7 @@ namespace core {
 		const Geometry& GetGeometry() const { return *_geometry; }
 
 		virtual bool IsColliding(Collider& other) const;
+		bool IsInitialize() const { return _geometry != nullptr; }
 
 	protected:
 		std::unique_ptr<Geometry> _geometry;

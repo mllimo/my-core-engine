@@ -13,6 +13,7 @@
 
 namespace core {
 	class CORE_EXPORT CollisionEngine {
+		friend class Listener;
 	public:
 		static void Init();
 		static void Add(Actor* object);

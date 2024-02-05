@@ -21,14 +21,14 @@ namespace core {
 
 	void Actor::EnableCollider()
 	{
-		_enable_collider = true;
 		CollisionEngine::Add(this);
+		_enable_collider = true;
 	}
 
 	void Actor::DisableCollider()
 	{
-		_enable_collider = false;
 		CollisionEngine::Remove(this);
+		_enable_collider = false;
 	}
 
 	void Actor::SetProperties(Properties&& properties)

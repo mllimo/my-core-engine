@@ -12,7 +12,6 @@
 #include <Core/H/Collider.h>
 
 namespace core {
-
 	class CORE_EXPORT Actor {
 		friend class CollisionEngine;
 	public:
@@ -49,10 +48,10 @@ namespace core {
 		void SetRotation(float rotation);
 		void SetTag(const std::string& tag);
 
-
 		// Base Getters
 		const Properties& GetProperties() const { return _properties; }
 		const Collider& GetCollider() const { return _properties.collider; }
+		Collider& GetCollider() { return _properties.collider; }
 		Vector2 GetPosition() { return _properties.position; }
 		float GetRotation() { return _properties.rotation; }
 		std::string_view GetTag() { return _properties.tag; }

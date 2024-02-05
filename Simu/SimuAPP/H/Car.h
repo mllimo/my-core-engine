@@ -9,6 +9,7 @@
 #include <Core/H/DeltaTime.h>
 #include <Core/H/Actor.h>
 #include <Core/H/Math.h>
+#include <Core/H/CollisionEngine.h>
 
 
 class CarActor : public core::Actor {
@@ -29,6 +30,8 @@ public:
 
         SetPosition({ 100, 100 });
         SetTag("Car");
+
+        _properties.b2_properties.fixture->SetDensity(100.f);
     }
 
     void SetPropertiesImp(const Actor::Properties& properties) override
@@ -53,6 +56,9 @@ public:
     {
         static const float rotation = 0.5f;
 
+        if (core::CollisionEngine::AreColliding(this, "Wall"))
+            TraceLog(LOG_INFO, "Car vs Wall");
+
         if (IsKeyDown(KEY_W)) {
             float velo_delta = _body.velocity * core::DeltaTime::delta;
             Vector2 force_vector = { cos(GetRotation()), sin(GetRotation())};
@@ -63,11 +69,8 @@ public:
 
         if (IsKeyDown(KEY_S)) {
             float velo_delta = _body.velocity * core::DeltaTime::delta;
-            Vector2 force_vector = { cos(GetRotation()), sin(GetRotation()) * -1 };
+            Vector2 force_vector = { cos(GetRotation()) * -1, sin(GetRotation()) * -1};
             _properties.b2_properties.body->SetLinearVelocity(core::ToB2Vetor2(force_vector));
-
-            //_body.force = force_vector;
-            //SetPosition(Vector2Add(GetPosition(), force_vector));
         }
 
         if (IsKeyDown(KEY_D)) {
