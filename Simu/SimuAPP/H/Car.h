@@ -56,7 +56,7 @@ public:
     {
         static const float rotation = 0.5f;
 
-        if (core::CollisionEngine::AreColliding(this, "Wall"))
+        if (core::CollisionEngine::Instance().AreColliding(this, "Wall"))
             TraceLog(LOG_INFO, "Car vs Wall");
 
         if (IsKeyDown(KEY_W)) {

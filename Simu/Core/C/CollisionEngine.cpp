@@ -7,20 +7,16 @@
 
 namespace core {
 
-	b2World CollisionEngine::_world(b2Vec2(0, 0));
-	std::deque<Actor*> CollisionEngine::_objects = {};
-	std::unordered_map<Actor*, std::unordered_set<Actor*>> CollisionEngine::_collision_map = {};
-
 	class Listener : public b2ContactListener {
 		void BeginContact(b2Contact* contact) override
 		{
 			auto* actor_a = reinterpret_cast<Actor*>(contact->GetFixtureA()->GetBody()->GetUserData().pointer);
 			auto* actor_b = reinterpret_cast<Actor*>(contact->GetFixtureB()->GetBody()->GetUserData().pointer);
 
-			auto& set_a = CollisionEngine::_collision_map[actor_a];
+			auto& set_a = CollisionEngine::Instance()._collision_map[actor_a];
 			set_a.insert(actor_b);
 
-			auto& set_b = CollisionEngine::_collision_map[actor_b];
+			auto& set_b = CollisionEngine::Instance()._collision_map[actor_b];
 			set_b.insert(actor_a);
 		}
 	};

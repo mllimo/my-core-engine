@@ -10,21 +10,25 @@
 #include <box2d/box2d.h>
 
 #include <Core/H/Actor.h>
+#include <Core/H/Singleton.h>
+
 
 namespace core {
-	class CORE_EXPORT CollisionEngine {
+	class CORE_EXPORT CollisionEngine : public Singleton<CollisionEngine> {
 		friend class Listener;
 	public:
-		static void Init();
-		static void Add(Actor* object);
-		static void Remove(Actor* object);
-		static bool AreColliding(Actor* a, Actor* b);
-		static bool AreColliding(Actor* a, std::string_view tag);
-		static void Update();
+		CollisionEngine() : _world({0, 0}) { }
+
+		void Init() override;
+		void Add(Actor* object);
+		void Remove(Actor* object);
+		bool AreColliding(Actor* a, Actor* b);
+		bool AreColliding(Actor* a, std::string_view tag);
+		void Update();
 
 	private:
-		static b2World _world;
-		static std::deque<Actor*> _objects;
-		static std::unordered_map<Actor*, std::unordered_set<Actor*>> _collision_map;
+		b2World _world;
+		std::deque<Actor*> _objects;
+		std::unordered_map<Actor*, std::unordered_set<Actor*>> _collision_map;
 	};
 }

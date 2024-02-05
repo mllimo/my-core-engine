@@ -15,20 +15,21 @@ namespace core {
 
 	Actor::~Actor()
 	{
-		_enable_collider = false;
-		CollisionEngine::Remove(this);
+		DisableCollider();
 	}
 
 	void Actor::EnableCollider()
 	{
-		CollisionEngine::Add(this);
+		CollisionEngine::Instance().Add(this);
 		_enable_collider = true;
 	}
 
 	void Actor::DisableCollider()
 	{
-		CollisionEngine::Remove(this);
-		_enable_collider = false;
+		if (_enable_collider) {
+			CollisionEngine::Instance().Remove(this);
+			_enable_collider = false;
+		}
 	}
 
 	void Actor::SetProperties(Properties&& properties)

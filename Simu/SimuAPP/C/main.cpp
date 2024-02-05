@@ -42,7 +42,7 @@ public:
 
     void UpdateLogic() override
     {
-        if (core::CollisionEngine::AreColliding(this, "Car"))
+        if (core::CollisionEngine::Instance().AreColliding(this, "Car"))
             _color = GREEN;
         else
             _color = RED;
@@ -69,7 +69,7 @@ int main() {
     CarActor car;
     Wall wall;
 
-    core::CollisionEngine::Init();
+    core::CollisionEngine::Instance().Init();
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
@@ -88,7 +88,7 @@ int main() {
         car.UpdateLogic();
         //wall.UpdateLogic();
 
-        core::CollisionEngine::Update();
+        core::CollisionEngine::Instance().Update();
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
