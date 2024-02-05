@@ -80,7 +80,7 @@ namespace core {
 
 		return false;
 	}
-		
+
 	void CollisionEngine::Update()
 	{
 		static const int32_t velocity_iterations = 6;

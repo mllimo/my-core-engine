@@ -67,7 +67,7 @@ namespace core {
 	protected:
 		// Custom Setters
 		virtual	void SetPropertiesImp(const Properties& /*properties*/) {}
-		virtual void SetPositionImp(Vector2 /*position*/ ) {}
+		virtual void SetPositionImp(Vector2 /*position*/) {}
 		virtual void SetRotationImp(float /*rotation*/) {}
 
 		// UpdatesFromB2

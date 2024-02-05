@@ -11,7 +11,7 @@
 #include <Core/H/Math.h>
 
 namespace core {
-	
+
 	class CORE_EXPORT Geometry {
 		friend class CollisionEngine;
 	public:
@@ -50,7 +50,7 @@ namespace core {
 		Vector2& At(size_t index) { return _vertices[index]; }
 
 		void ResizeVertices(size_t size);
-	
+
 	private:
 		float _angle = 0;
 		Vector2 _origin = { 0, 0 };
@@ -66,7 +66,7 @@ namespace core {
 		Square(Vector2 position, Vector2 size);
 
 		Geometry* Copy() const override;
-		
+
 		// Setters
 		void SetSize(Vector2 size);
 
