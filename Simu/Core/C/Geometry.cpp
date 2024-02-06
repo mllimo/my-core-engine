@@ -76,24 +76,6 @@ namespace core {
 	void Geometry::ResizeVertices(size_t size)
 	{
 		_vertices.resize(size);
-		Updateb2();
-	}
-
-	void Geometry::Updateb2()
-	{
-		if (_b2_shape) {
-			//for (int i = 0; i < _vertices.size(); ++i) {
-			//	_b2_shape->m_vertices[i] = Scale(_vertices[i]);
-			//}
-			//_b2_shape->m_count = (int32_t)_vertices.size();
-		}
-	}
-
-	void Geometry::UpdateFromb2()
-	{
-		//for (int i = 0; i < _b2_shape->m_count; ++i) {
-		//	_vertices[i] = Vector2Add(Scale(_b2_shape->m_vertices[i]));
-		//}
 	}
 
 
@@ -157,6 +139,32 @@ namespace core {
 	float Circle::GetRadius() const
 	{
 		return _radius;
+	}
+
+	//------------------------------------------------------------------------------------
+	// Triangle
+	//------------------------------------------------------------------------------------
+
+	Triangle::Triangle(Vector2 p1, Vector2 p2, Vector2 p3)
+	{
+		SetVertices(p1, p2, p3);
+	}
+
+	Geometry* Triangle::Copy() const
+	{
+		return new Triangle(*this);
+	}
+
+	void Triangle::SetVertices(Vector2 p1, Vector2 p2, Vector2 p3)
+	{
+		if (GetVertices().size() < 3) {
+			ResizeVertices(3);
+		}
+
+		At(0) = p1;
+		At(1) = p2;
+		At(2) = p3;
+		SetOrigin(GetCenter());
 	}
 
 }

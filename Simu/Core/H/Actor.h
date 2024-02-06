@@ -61,7 +61,7 @@ namespace core {
 		virtual void UpdateDraw() {}
 		virtual void OnNoCollision() {}
 
-		// Debug drawss
+		// Debug draws
 		void DebugDrawDirectionLine();
 
 	protected:

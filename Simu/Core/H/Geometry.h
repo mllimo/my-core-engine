@@ -43,9 +43,6 @@ namespace core {
 		virtual const std::vector<Vector2>& GetVertices() const { return _vertices; }
 
 	protected:
-		void Updateb2();
-		void UpdateFromb2();
-
 		const Vector2& At(size_t index) const { return _vertices[index]; }
 		Vector2& At(size_t index) { return _vertices[index]; }
 
@@ -56,8 +53,9 @@ namespace core {
 		Vector2 _origin = { 0, 0 };
 		std::vector<Vector2> _vertices;
 		b2PolygonShape* _b2_shape = nullptr;
-
 	};
+
+//===========================================================
 
 	class CORE_EXPORT Square : public Geometry {
 	public:
@@ -78,6 +76,8 @@ namespace core {
 		Vector2 _size;
 	};
 
+//===========================================================
+
 	class CORE_EXPORT Circle : public Geometry {
 	public:
 		using Geometry::Geometry;
@@ -95,5 +95,26 @@ namespace core {
 
 	private:
 		float _radius;
+	};
+
+//===========================================================
+
+	class CORE_EXPORT Triangle : public Geometry {
+	public:
+		using Geometry::Geometry;
+
+		// p1: left, p2: upper-middle, p3: right 
+		Triangle(Vector2 p1, Vector2 p2, Vector2 p3);
+
+		Geometry* Copy() const override;
+
+		// Setters
+		void SetVertices(Vector2 p1, Vector2 p2, Vector2 p3);
+
+
+		// Getters
+		Vector2 GetP1() const { return At(0); }
+		Vector2 GetP2() const { return At(1); }
+		Vector2 GetP3() const { return At(2); }
 	};
 }
