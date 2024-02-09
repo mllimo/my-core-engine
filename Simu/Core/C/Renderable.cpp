@@ -6,7 +6,7 @@
 #include <rlgl.h>
 
 namespace core {
-	Renderable::Renderable(Geometry* geometry)
+	Renderable::Renderable(Geometry* geometry) : _image({ 0 })
 	{
 		if (geometry == nullptr)
 			throw RenderableException("Bad geometry ptr");
@@ -16,8 +16,10 @@ namespace core {
 
 	Renderable::~Renderable()
 	{
-		UnloadImage(_image);	 // from CPU
-		UnloadTexture(_texture); // from GPU
+		if (_image.data != nullptr) {
+			UnloadImage(_image);	 // from CPU
+			UnloadTexture(_texture); // from GPU
+		}
 	}
 
 
@@ -92,9 +94,9 @@ namespace core {
 		return { min, max - min };
 	}
 
-	void Renderable::Draw()
+	void Renderable::DrawTexture() const
 	{
-		auto min_x_width  = GetMinAndSize(_geometry->GetVertices(), [](const Vector2& v) { return v.x; });
+		auto min_x_width = GetMinAndSize(_geometry->GetVertices(), [](const Vector2& v) { return v.x; });
 		auto min_y_height = GetMinAndSize(_geometry->GetVertices(), [](const Vector2& v) { return v.y; });
 
 		std::vector<Vector2> tex_coords(_geometry->GetVertices().size());
@@ -113,5 +115,20 @@ namespace core {
 		}
 
 		DrawTexturePoly(_texture, _geometry->GetCenter(), (Vector2*)_geometry->GetVertices().data(), (Vector2*)tex_coords.data(), tex_coords.size(), _color);
+	}
+
+	void Renderable::DrawBase() const
+	{
+		DrawTriangleFan((Vector2*)_geometry->GetVertices().data(), _geometry->GetVertices().size(), _color);
+	}
+
+	void Renderable::Draw() const
+	{
+		if (_image.data != nullptr) {
+			DrawTexture();
+		}
+		else {
+			DrawBase();
+		}
 	}
 }

@@ -26,12 +26,16 @@ namespace core {
 
 
 		// Custom methods
-		virtual void Draw();
+		virtual void Draw() const;
 
 	protected:
 		Geometry* _geometry = nullptr;
 		Color _color;
 		Image _image;
 		Texture2D _texture;
+
+		void DrawTexture() const;
+		void DrawBase() const;
+
 	};
 }

@@ -23,8 +23,8 @@ public:
 		_body.SetSize({ 100, 100 });
 		_body.SetOrigin(_body.GetCenter());
 		_render_body.SetColor(WHITE);
-		auto image = LoadImage("wall.png");
-		_render_body.SetTexture(std::move(image));
+		//auto image = LoadImage("wall.png");
+		//_render_body.SetTexture(std::move(image));
 
 		core::Collider collider(_body);
 		SetCollider(std::move(collider));
