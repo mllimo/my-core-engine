@@ -105,8 +105,6 @@ namespace core {
 		At(2) = { At(0).x + size.x, At(0).y + size.y };
 		At(3) = { At(0).x + size.x, At(0).y };
 		SetRotation(GetRotation());
-
-		Updateb2();
 	}
 
 	Vector2 Square::GetSize() const
