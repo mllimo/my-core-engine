@@ -40,7 +40,8 @@ include(GenerateExportHeader)
 # YOUR MODULES HERE
 #######################
 
-add_subdirectory(Simu)
+add_subdirectory("src")
+add_subdirectory("examples")
 
 #######################
 # END
