@@ -42,19 +42,36 @@ namespace core {
 		return distance <= sumRadii;
 	}
 
+	static bool IsPointInsideConvexPolygon(Vector2 point, const Geometry& geo)
+	{
+		size_t size = geo.GetVertices().size();
+		int i, j;
+		bool inside = false;
+
+		for (i = 0, j = size - 1; i < size; j = i++) {
+			if (((geo.At(i).y > point.y) != (geo.At(j).y > point.y)) &&
+				(point.x < (geo.At(j).x - geo.At(i).x) * (point.y - geo.At(i).y) / (geo.At(j).y - geo.At(i).y) + geo.At(i).x)) {
+				inside = !inside;
+			}
+		}
+
+		return inside;
+	}
+
 	bool Collider::IsCollidingVsCircle(const Geometry& this_geo, const Circle& other) const
 	{
 		Vector2 this_position = this_geo.GetPosition();
 		const std::vector<Vector2>& this_vertices = this_geo.GetVertices();
 
-		for (const Vector2& vertex : this_vertices)
-		{
-			Vector2 sum = Vector2Add(vertex, this_position);
-			Circle vertex_circle(sum, 0.0f);
-			vertex_circle.SetRadius(Vector2Distance(vertex_circle.GetCenter(), sum));
+		// Verifica si el centro del círculo está dentro de la figura convexa
+		if (IsPointInsideConvexPolygon(other.GetCenter(), this_geo)) {
+			return true;
+		}
 
-			if (IsCollidingCircleVsCircle(vertex_circle, other))
-			{
+		for (const Vector2& vertex : this_vertices) {
+			float distance = Vector2Distance(vertex, other.GetCenter());
+
+			if (distance <= other.GetRadius()) {
 				return true;
 			}
 		}
