@@ -35,6 +35,7 @@ namespace core {
 
 		// Base Getters
 		Vector2 GetPosition() const { return (_vertices.empty() ? Vector2Zero() : _vertices.front()); }
+		const Vector2& At(size_t index) const { return _vertices[index]; }
 		float   GetRotation() const { return _angle; }
 		Vector2 GetOrigin() const { return _origin; }
 		Vector2 GetCenter() const;
@@ -43,7 +44,6 @@ namespace core {
 		virtual const std::vector<Vector2>& GetVertices() const { return _vertices; }
 
 	protected:
-		const Vector2& At(size_t index) const { return _vertices[index]; }
 		Vector2& At(size_t index) { return _vertices[index]; }
 
 		void ResizeVertices(size_t size);

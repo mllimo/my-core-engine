@@ -7,16 +7,16 @@ find_package(box2d)
 file(GLOB CPP_SOURCES "*/**.cpp" "*/**.cc")
 file(GLOB HPP_SOURCES "*/**.hpp" "*/**.h")
 
-add_executable("Tests" ${CPP_SOURCES} ${HPP_SOURCES})
-target_link_libraries("Tests" Core raylib box2d::box2d)
+add_executable("button_counter" ${CPP_SOURCES} ${HPP_SOURCES})
+target_link_libraries("button_counter" Core raylib box2d::box2d)
 
-target_include_directories("Tests"
+target_include_directories("button_counter"
   PRIVATE
 	..
 )
 
 install(TARGETS 
-  "Tests"
+  "button_counter"
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
