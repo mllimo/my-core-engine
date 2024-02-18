@@ -8,13 +8,10 @@ namespace core {
 	{
 		bool inside = false;
 
-		if (pointCount > 2)
-		{
-			for (int i = 0, j = pointCount - 1; i < pointCount; j = i++)
-			{
+		if (pointCount > 2) {
+			for (int i = 0, j = pointCount - 1; i < pointCount; j = i++) {
 				if ((points[i].y > point.y) != (points[j].y > point.y) &&
-					(point.x < (points[j].x - points[i].x) * (point.y - points[i].y) / (points[j].y - points[i].y) + points[i].x))
-				{
+					(point.x < (points[j].x - points[i].x) * (point.y - points[i].y) / (points[j].y - points[i].y) + points[i].x)) {
 					inside = !inside;
 				}
 			}
@@ -63,7 +60,6 @@ namespace core {
 		Vector2 this_position = this_geo.GetPosition();
 		const std::vector<Vector2>& this_vertices = this_geo.GetVertices();
 
-		// Verifica si el centro del círculo está dentro de la figura convexa
 		if (IsPointInsideConvexPolygon(other.GetCenter(), this_geo)) {
 			return true;
 		}
