@@ -12,53 +12,34 @@
 #include <Core/H/Actor.h>
 #include <Core/H/CollisionEngine.h>
 #include <Core/H/Renderable.h>
+#include <Core/H/Singleton.h>
+#include <Core/H/APP.h>
 
 #include <SimuAPP/H/Button.h>
 
-
-int main() {
-	// Initialization
-	//--------------------------------------------------------------------------------------
-	const int screenWidth = 800;
-	const int screenHeight = 450;
-
-	InitWindow(screenWidth, screenHeight, "Counter button");
-
-	SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
-	//--------------------------------------------------------------------------------------
-
-	int counter = 0;
-	Button button({ screenWidth / 2 - 60, screenHeight / 2 - 30}, { 60, 30 });
-	button.SetOnCick([&counter]() { counter += 1; });
-
-	core::CollisionEngine::Instance().Init();
-
-	// Main game loop
-	while (!WindowShouldClose())    // Detect window close button or ESC key
+class ButtonAPP : public core::APP, public core::Singleton<ButtonAPP>
+{
+public:
+	void Init() override
 	{
-		core::DeltaTime delta;
-		// Update
-		//----------------------------------------------------------------------------------
-
-		button.UpdateLogic();
-
-		core::CollisionEngine::Instance().Update();
-
-		// Draw
-		//----------------------------------------------------------------------------------
-		BeginDrawing();
-
-		ClearBackground(RAYWHITE);
-
-		DrawText(std::to_string(counter).c_str(), 10, 10, 20, BLACK);
-		button.UpdateDraw();
-
-		EndDrawing();
-		//----------------------------------------------------------------------------------
+		std::shared_ptr<Button> button_ptr(new Button({ _screen_width / 2.f - 60.f, _screen_height / 2.f - 30.f}, { 60.f, 30.f }));
+		_button = button_ptr;
+		_button.lock()->SetOnCick([this]() { _counter += 1; });
+		AddActor(std::move(button_ptr));
 	}
 
-	// De-Initialization
-	//--------------------------------------------------------------------------------------
-	CloseWindow();        // Close window and OpenGL context
-	//--------------------------------------------------------------------------------------
+	void UserDraw() override
+	{
+		DrawText(std::to_string(_counter).c_str(), 10, 10, 20, BLACK);
+	}
+
+private:
+	const int _screen_width = 800;
+	const int _screen_height = 450;
+	int _counter = 0;
+	std::weak_ptr<Button> _button;
+};
+
+int main(int argc, char** argv) {
+	return ButtonAPP::Instance().Main(argc, argv);
 }
