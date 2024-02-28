@@ -119,7 +119,18 @@ namespace core {
 
 	void Renderable::DrawBase() const
 	{
-		DrawTriangleFan((Vector2*)_geometry->GetVertices().data(), _geometry->GetVertices().size(), _color);
+		switch (_geometry->GetKind())
+		{
+		case Geometry::Kind::CIRCLE:
+			{
+				auto circle = static_cast<Circle*>(_geometry);
+				DrawCircleV(_geometry->GetPosition(), circle->GetRadius(), _color);
+				break;
+			}
+		default:
+			DrawTriangleFan((Vector2*)_geometry->GetVertices().data(), _geometry->GetVertices().size(), _color);
+			break;
+		}
 	}
 
 	void Renderable::Draw() const

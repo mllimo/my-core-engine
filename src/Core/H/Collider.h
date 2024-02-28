@@ -27,6 +27,8 @@ namespace core {
 		void SetGeometry(std::unique_ptr<Geometry> collider) { _geometry = std::move(collider); }
 
 		const Geometry& GetGeometry() const { return *_geometry; }
+		Geometry& GetGeometry() { return *_geometry; }
+
 
 		virtual bool IsColliding(Collider& other) const;
 		bool IsInitialize() const { return _geometry != nullptr; }

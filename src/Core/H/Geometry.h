@@ -12,12 +12,22 @@
 
 namespace core {
 
+	//TODO: Fix _origin
 	class CORE_EXPORT Geometry {
 		friend class CollisionEngine;
 	public:
-		Geometry() = default;
+		enum class Kind{
+			POLY,
+			SQUARE,
+			TRIANGLE,
+			CIRCLE
+		};
+
+		Geometry(Kind kind);
 		Geometry(const Geometry&) = default;
 		Geometry(Geometry&&) = default;
+
+		virtual ~Geometry() = default;
 
 		Geometry& operator=(const Geometry&) = default;
 		Geometry& operator=(Geometry&&) = default;
@@ -31,7 +41,9 @@ namespace core {
 		// Base Setters
 		void SetPosition(Vector2 position);
 		void SetRotation(float radians);
-		void SetOrigin(Vector2 origin);
+
+		// Set a relative position from the first vertex to be the new origin
+		void SetOrigin(Vector2 origin); //< TODO: Fix
 
 		// Base Getters
 		Vector2 GetPosition() const { return (_vertices.empty() ? Vector2Zero() : _vertices.front()); }
@@ -39,6 +51,8 @@ namespace core {
 		float   GetRotation() const { return _angle; }
 		Vector2 GetOrigin() const { return _origin; }
 		Vector2 GetCenter() const;
+		Kind GetKind() const { return _kind; }
+
 
 		// Implementations
 		virtual const std::vector<Vector2>& GetVertices() const { return _vertices; }
@@ -49,10 +63,10 @@ namespace core {
 		void ResizeVertices(size_t size);
 
 	private:
+		Kind _kind;
 		float _angle = 0;
-		Vector2 _origin = { 0, 0 };
+		Vector2 _origin = { 0, 0 }; // Relative to position
 		std::vector<Vector2> _vertices;
-		b2PolygonShape* _b2_shape = nullptr;
 	};
 
 //===========================================================
@@ -85,6 +99,7 @@ namespace core {
 		Circle(Vector2 position, float radius);
 
 		Geometry* Copy() const override;
+		b2Shape* ConstructB2FromThis() const override;
 
 		// Setters
 		void SetRadius(float radius);

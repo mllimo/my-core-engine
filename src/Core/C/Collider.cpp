@@ -57,7 +57,6 @@ namespace core {
 
 	bool Collider::IsCollidingVsCircle(const Geometry& this_geo, const Circle& other) const
 	{
-		Vector2 this_position = this_geo.GetPosition();
 		const std::vector<Vector2>& this_vertices = this_geo.GetVertices();
 
 		if (IsPointInsideConvexPolygon(other.GetCenter(), this_geo)) {

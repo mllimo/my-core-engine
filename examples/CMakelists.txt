@@ -1,1 +1,2 @@
-add_subdirectory("SimuAPP")
+add_subdirectory("ButtonCounter")
+add_subdirectory("PingPong")

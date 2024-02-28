@@ -11,7 +11,6 @@ namespace core {
 		static Type& Instance()
 		{
 			static Type instance;
-			instance.Init();
 			return instance;
 		}
 
