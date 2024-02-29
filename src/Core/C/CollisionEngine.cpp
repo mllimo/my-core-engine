@@ -28,10 +28,11 @@ namespace core {
 
 	void CollisionEngine::Add(Actor* object)
 	{
+		b2Vec2 scale_position = Scale(object->_properties.collider.GetGeometry().GetCenter());
 		b2BodyDef def;
 		def.type = b2_dynamicBody;
-		def.position.Set(object->_properties.position.x, object->_properties.position.y);
-		def.angle = object->_properties.rotation;
+		def.position.Set(scale_position.x, scale_position.y);
+		def.angle = object->_properties.collider.GetGeometry().GetRotation();
 		object->_properties.b2_properties.body = _world.CreateBody(&def);
 
 		if (not object->GetCollider().IsInitialize())
@@ -39,7 +40,6 @@ namespace core {
 
 		std::unique_ptr<b2Shape> aux_ptr(object->GetCollider().GetGeometry().ConstructB2FromThis());
 		object->_properties.b2_properties.fixture = object->_properties.b2_properties.body->CreateFixture(aux_ptr.get(), 1);
-		object->_properties.collider._geometry->_b2_shape = dynamic_cast<b2PolygonShape*>(object->_properties.b2_properties.fixture->GetShape());
 
 		object->_properties.b2_properties.body->GetUserData().pointer = reinterpret_cast<uintptr_t>(object);
 

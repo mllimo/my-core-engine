@@ -38,8 +38,10 @@ namespace core {
 		Actor& operator=(const Actor&) = default;
 		Actor& operator=(Actor&&) = default;
 
+
 		void EnableCollider();
 		void DisableCollider();
+
 
 		// Base Setters
 		void SetProperties(Properties&& properties);
@@ -47,6 +49,7 @@ namespace core {
 		void SetPosition(Vector2 position);
 		void SetRotation(float rotation);
 		void SetTag(const std::string& tag);
+
 
 		// Base Getters
 		const Properties& GetProperties() const { return _properties; }
@@ -56,10 +59,12 @@ namespace core {
 		float GetRotation() { return _properties.rotation; }
 		std::string_view GetTag() { return _properties.tag; }
 
+
 		// Custom functions
 		virtual void UpdateLogic() {}
 		virtual void UpdateDraw() {}
 		virtual void OnNoCollision() {}
+
 
 		// Debug draws
 		void DebugDrawDirectionLine();

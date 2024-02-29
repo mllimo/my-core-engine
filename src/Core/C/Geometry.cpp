@@ -2,6 +2,10 @@
 
 namespace core {
 
+	Geometry::Geometry(Kind kind) : _kind(kind)
+	{
+	}
+
 	Geometry* Geometry::Copy() const
 	{
 		return new Geometry(*this);
@@ -40,13 +44,12 @@ namespace core {
 
 	void Geometry::SetPosition(Vector2 position)
 	{
-		Vector2 distance = Vector2Subtract(position, _origin);
-		_origin = Vector2Add(_origin, distance);
+		auto real_pos = Vector2Add(GetPosition(), _origin);
+		Vector2 distance = Vector2Subtract(position, real_pos);
 
 		for (auto& vertex : _vertices) {
 			vertex = Vector2Add(vertex, distance);
 		}
-
 	}
 
 	void Geometry::SetRotation(float radians)
@@ -54,8 +57,8 @@ namespace core {
 		float sin_a = sin(radians - _angle);
 		float cos_a = cos(radians - _angle);
 
-		float pivotX = _origin.x;
-		float pivotY = _origin.y;
+		float pivotX = _origin.x + GetPosition().x;
+		float pivotY = _origin.y + GetPosition().y;
 
 		for (auto& vertex : _vertices) {
 			float x = vertex.x - pivotX;
@@ -82,12 +85,12 @@ namespace core {
 	//------------------------------------------------------------------------------------
 	// Square
 	//------------------------------------------------------------------------------------
-	Square::Square(Vector2 position, Vector2 size) :
-		_size(size)
+	Square::Square(Vector2 position, Vector2 size) 
+		: Geometry(Kind::SQUARE)
+		, _size(size)
 	{
 		ResizeVertices(4);
 		At(0) = position;
-		SetOrigin(position);
 		SetSize(size);
 	}
 
@@ -117,16 +120,25 @@ namespace core {
 	//------------------------------------------------------------------------------------
 
 	Circle::Circle(Vector2 position, float radius)
+		: Geometry(Kind::CIRCLE)
 	{
 		ResizeVertices(1);
 		At(0) = position;
-		SetOrigin(position);
 		SetRadius(radius);
 	}
 
 	Geometry* Circle::Copy() const
 	{
 		return new Circle(*this);
+	}
+
+	b2Shape* Circle::ConstructB2FromThis() const
+	{
+		b2CircleShape* shape = new b2CircleShape;
+		
+		shape->m_radius = GetRadius() * SCALE_FACTOR;
+
+		return shape;
 	}
 
 	void Circle::SetRadius(float radius)
@@ -144,6 +156,7 @@ namespace core {
 	//------------------------------------------------------------------------------------
 
 	Triangle::Triangle(Vector2 p1, Vector2 p2, Vector2 p3)
+		: Geometry(Kind::TRIANGLE)
 	{
 		SetVertices(p1, p2, p3);
 	}
@@ -162,7 +175,6 @@ namespace core {
 		At(0) = p1;
 		At(1) = p2;
 		At(2) = p3;
-		SetOrigin(GetCenter());
 	}
 
 }

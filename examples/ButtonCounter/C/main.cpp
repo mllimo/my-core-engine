@@ -15,7 +15,7 @@
 #include <Core/H/Singleton.h>
 #include <Core/H/APP.h>
 
-#include <SimuAPP/H/Button.h>
+#include <ButtonCounter/H/Button.h>
 
 class ButtonAPP : public core::APP, public core::Singleton<ButtonAPP>
 {
